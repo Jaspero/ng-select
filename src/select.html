@@ -1,0 +1,19 @@
+<template [ngIf]="selected">
+    <div [ngSwitch]="isMulti" class="items" (click)="openActive($event)">
+        <template [ngSwitchCase]="true">
+            <div class="item" *ngFor="let item of selected; let i = index">
+                <span (click)="remove(i, $event)">{{item[key]}}</span>
+            </div>
+        </template>
+        <template [ngSwitchCase]="false">
+            <div class="item">{{selected[key]}}</div>
+        </template>
+    </div>
+</template>
+<div class="dropdown" [class.active]="active">
+    <div class="dropdown-content">
+        <div class="option" *ngFor="let item of formatedSelection; let i = index" (click)="select(i, $event)">
+            {{item[key]}}
+        </div>
+    </div>
+</div>
