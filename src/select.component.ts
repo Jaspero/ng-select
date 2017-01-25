@@ -19,8 +19,10 @@ export class SelectComponent implements ControlValueAccessor {
     @Input() selected: any;
 
     @Input() set options(sel: any[]) {
-        this.selection = sel;
-        this.formatedSelection = sel.map(item => item);
+        if (sel) {
+            this.selection = sel;
+            this.formatedSelection = sel.map(item => item);
+        }
     }
 
     @Input() key: string = 'name';
