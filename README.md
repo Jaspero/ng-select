@@ -1,15 +1,15 @@
 [![Build Status](https://travis-ci.org/Jaspero/ng2-select.svg?branch=master)](https://travis-ci.org/jaspero/ng2-select)
 [![NPM Version](https://img.shields.io/npm/v/@jaspero/ng2-select.svg)](https://www.npmjs.com/package/@jaspero/ng2-select)
 # NG2 Select
-An easy to use alert library for Angular 2.
+A select library for Angular 2, with both single and multiple functionality.
 
 ## Setup
-Import `JasperoAlertsModule` in your `@NgModule`: 
+Import `JasperoSelectModule` in your `@NgModule`:
 
 ```ts
 @NgModule({
     imports: [
-        JasperoAlertsModule
+        JasperoSelectModule
     ],
     declarations: [AppComponent],
     bootstrap: [AppComponent]
@@ -17,42 +17,21 @@ Import `JasperoAlertsModule` in your `@NgModule`:
 export class AppModule {}
 ```
 
-Then create the component in a root component (you can create it anywhere but you can only use it in that component on any lower ones).
-
-```html
-<jaspero-alerts [defaultSettings]="options"></jaspero-alerts>
-```
-
-## How To Use 
-You need to import the `AlertsService` in your component:
- 
+## How To Use
+To use the library simply add the component in your templates:
 ```typescript
-constructor(private _alert: AlertsService) {}
-```
-
-Then use the `create(type: 'success' | 'error' | 'wearning', 'info', message: string, settings: AlertSettings)` method to initiate an alert.
-
-```typescript
-open(type: AlertType) {
-    this._alert.create(type, 'This is a message');
-}
+<jaspero-select></jaspero-select>
 ```
 
 ## Options
 
-Available settings: 
+You can pass the following inputs to the component:
 
-```typescript
-export interface AlertSettings {
-    overlay?: boolean;
-    overlayClickToClose?: boolean;
-    showCloseButton?: boolean;
-    duration?: number;
-}
-```
+|Name|Type|Description|Default|
+|---|---|---|---|
+|options|An array of options for the select dropdown|any[]|[]|
+|key|The key from the options object to be used as the name of the option|string|name|
+|multi|Should more options be selectable at once|boolean|false|
 
-You can provide the settings as input to the `<jaspero-alerts></jaspero-alerts>` component.
-Making the settings default for each created alert. However you can also override the settings by
-passing them in the `create()` method.
-
+This component also support Angular 2 template driven and reactive forms.
  
