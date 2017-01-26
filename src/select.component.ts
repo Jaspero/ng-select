@@ -1,4 +1,4 @@
-import {Component, Input, forwardRef, HostListener} from '@angular/core';
+import {Component, Input, forwardRef, HostListener, ViewChild, ElementRef} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 @Component({
@@ -22,43 +22,54 @@ export class SelectComponent implements ControlValueAccessor {
         if (sel) {
             this.selection = sel;
             this.formatedSelection = sel.map(item => item);
+            this.filteredSelection = sel.map(item => item);
         }
     }
 
+    @Input() matchFromStart: boolean = false;
     @Input() key: string = 'name';
     @Input() set multi(to: boolean) {
         this.isMulti = to;
         if (to) this.selected = this.selected || [];
     }
 
+    @ViewChild('inp') inpEl: ElementRef;
+
+    search: string = '';
+    activeIndex: number = null;
     isMulti: boolean = false;
     active: boolean = false;
 
     selection: any[] = [];
     formatedSelection: any[] = [];
+    filteredSelection: any[] = [];
 
     @HostListener('document:click') close() {
         this.active = false;
     }
 
-    select(index: number, event): void {
-        event.stopPropagation();
+    select(index: number, event?): void {
+        if (event) event.stopPropagation();
+
         if (this.isMulti) {
             this.selected = [...this.selected, this.formatedSelection[index]];
-            console.log(this.selected);
             this.formatedSelection.splice(index, 1);
+            this.filteredSelection.splice(index, 1);
         }
         else {
             this.selected = this.selection[index];
             this.active = false;
         }
+
+        this.search = '';
         this.propagateChange(this.selected);
     }
 
-    remove(index: number, event): void {
-        event.stopPropagation();
+    remove(index: number, event?): void {
+        if (event) event.stopPropagation();
         if (this.isMulti) {
             this.formatedSelection.push(this.selected[index]);
+            this.filteredSelection.push(this.selected[index]);
             this.selected.splice(index, 1);
         }
         else this.selected = null;
@@ -67,7 +78,52 @@ export class SelectComponent implements ControlValueAccessor {
 
     openActive(event) {
         event.stopPropagation();
+        this.inpEl.nativeElement.focus();
         this.active = !this.active;
+        this.activeIndex = this.active ? 0 : null;
+    }
+
+    keyUpHandler(event) {
+        event.stopPropagation();
+        switch (event.keyCode) {
+            case 8:
+                if (this.isMulti && this.search === '' && this.selected.length)  this.remove(this.selected.length - 1);
+                return;
+
+            case 38:
+                if (!this.active) {
+                    this.activeIndex = this.filteredSelection.length - 1;
+                    this.active = true;
+                }
+                else this.activeIndex = this.activeIndex > 0 ? this.activeIndex - 1 : this.filteredSelection.length - 1;
+                return;
+
+            case 40:
+                if (!this.active) {
+                    this.activeIndex = 0;
+                    this.active = true;
+                }
+                else this.activeIndex = this.activeIndex < this.filteredSelection.length - 1 ? this.activeIndex + 1 : 0;
+                return;
+
+            case 13:
+                if (this.activeIndex === null) return;
+                this.active = false;
+                this.select(this.activeIndex);
+                this.activeIndex = null;
+                return;
+        }
+    }
+
+    filterHandler() {
+        if (this.search === '') this.filteredSelection = this.formatedSelection.map(a => a);
+        else {
+            if (!this.active) {
+                this.activeIndex = 0;
+                this.active = true;
+            }
+            this.filteredSelection = this.matchFromStart ? this.formatedSelection.filter(value => value[this.key].indexOf(this.search) === 0) : this.formatedSelection.filter(value => value[this.key].indexOf(this.search) !== -1)
+        }
     }
 
     /*
