@@ -127,10 +127,23 @@ export class SelectComponent implements ControlValueAccessor {
     }
 
     /*
-     Form Control Value Accessor
+        Form Control Value Accessor
      */
     writeValue(value: any) {
-        if (value !== undefined) this.selected = value;
+        if (value !== undefined) {
+            this.selected = value;
+
+            if (this.isMulti) {
+                this.selected.forEach(item => {
+                    let index = this.formatedSelection.findIndex(i => i[this.key] === item[this.key]);
+
+                    if (index !== -1) {
+                        this.formatedSelection.splice(index, 1);
+                        this.filteredSelection.splice(index, 1);
+                    }
+                });
+            }
+        }
     }
 
     propagateChange = (_: any) => {};
@@ -140,4 +153,8 @@ export class SelectComponent implements ControlValueAccessor {
     }
 
     registerOnTouched() {}
+
+    /*
+        End of Form Control
+     */
 }
