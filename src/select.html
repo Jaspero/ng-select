@@ -5,7 +5,7 @@
         </div>
     </template>
     <template [ngSwitchCase]="false">
-        <div class="item">{{selected[key]}}</div>
+        <div *ngIf="selected">{{selected[key]}}</div>
     </template>
     <input type="text" name="search" autocomplete="off" #inp [(ngModel)]="search" (keyup)="keyUpHandler($event)" (ngModelChange)="filterHandler($event)">
 </div>
