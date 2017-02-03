@@ -48,12 +48,13 @@ export class SelectComponent implements ControlValueAccessor {
         this.active = false;
     }
 
-    select(index: number, event?): void {
+    select(index: any, event?): void {
         if (event) event.stopPropagation();
-
         if (this.isMulti) {
-            this.selected = [...this.selected, this.formatedSelection[index]];
-            this.formatedSelection.splice(index, 1);
+            this.selected = [...this.selected, this.filteredSelection[index]];
+
+            // TODO: Find a better option this is just a temp fix
+            this.formatedSelection.splice(this.formatedSelection.findIndex(item => this.filteredSelection[index][this.key] === item[this.key]), 1);
             this.filteredSelection.splice(index, 1);
         }
         else {
@@ -86,10 +87,6 @@ export class SelectComponent implements ControlValueAccessor {
     keyUpHandler(event) {
         event.stopPropagation();
         switch (event.keyCode) {
-            case 8:
-                if (this.isMulti && this.search === '' && this.selected.length)  this.remove(this.selected.length - 1);
-                return;
-
             case 38:
                 if (!this.active) {
                     this.activeIndex = this.filteredSelection.length - 1;
@@ -107,7 +104,7 @@ export class SelectComponent implements ControlValueAccessor {
                 return;
 
             case 13:
-                if (this.activeIndex === null) return;
+                if (this.activeIndex === null || !this.filteredSelection.length) return;
                 this.active = false;
                 this.select(this.activeIndex);
                 this.activeIndex = null;
@@ -115,19 +112,28 @@ export class SelectComponent implements ControlValueAccessor {
         }
     }
 
+    keyDownHandler(event) {
+        if (event.keyCode !== 8) return;
+        if (this.isMulti && this.search === '' && this.selected.length) this.remove(this.selected.length - 1);
+    }
+
     filterHandler() {
-        if (this.search === '') this.filteredSelection = this.formatedSelection.map(a => a);
+        if (this.search === '') {
+            this.filteredSelection = this.formatedSelection.map(a => a);
+        }
         else {
             if (!this.active) {
                 this.activeIndex = 0;
                 this.active = true;
             }
-            this.filteredSelection = this.matchFromStart ? this.formatedSelection.filter(value => value[this.key].indexOf(this.search) === 0) : this.formatedSelection.filter(value => value[this.key].indexOf(this.search) !== -1)
+
+            if (this.matchFromStart) this.filteredSelection = this.formatedSelection.filter(value => value[this.key].indexOf(this.search) === 0);
+            else this.filteredSelection = this.formatedSelection.filter(value => value[this.key].indexOf(this.search) !== -1)
         }
     }
 
     /*
-        Form Control Value Accessor
+     Form Control Value Accessor
      */
     writeValue(value: any) {
         if (value !== undefined) {
@@ -155,6 +161,6 @@ export class SelectComponent implements ControlValueAccessor {
     registerOnTouched() {}
 
     /*
-        End of Form Control
+     End of Form Control
      */
 }

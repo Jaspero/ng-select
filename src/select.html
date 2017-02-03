@@ -7,11 +7,11 @@
     <template [ngSwitchCase]="false">
         <div *ngIf="selected">{{selected[key]}}</div>
     </template>
-    <input type="text" name="search" autocomplete="off" #inp [(ngModel)]="search" (keyup)="keyUpHandler($event)" (ngModelChange)="filterHandler($event)">
+    <input type="text" name="search" autocomplete="off" #inp [(ngModel)]="search" (keyup)="keyUpHandler($event)" (keydown)="keyDownHandler($event)" (ngModelChange)="filterHandler($event)">
 </div>
 <div class="dropdown" [class.active]="active">
     <div class="dropdown-content">
-        <div class="option" *ngFor="let item of filteredSelection; let i = index" (click)="select(i, $event)" [class.selected]="i === activeIndex" (mouseenter)="activeIndex = i">
+        <div class="option" *ngFor="let item of filteredSelection; let i = index" (click)="select(i, $event)" (mouseenter)="activeIndex = i" [class.selected]="i === activeIndex">
             {{item[key]}}
         </div>
     </div>
