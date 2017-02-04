@@ -1,10 +1,10 @@
-import { ExamplePage } from './app.po';
+import { Ng2SelectPage } from './app.po';
 
-describe('example App', function() {
-  let page: ExamplePage;
+describe('ng2-select App', function() {
+  let page: Ng2SelectPage;
 
   beforeEach(() => {
-    page = new ExamplePage();
+    page = new Ng2SelectPage();
   });
 
   it('should display message saying app works', () => {
