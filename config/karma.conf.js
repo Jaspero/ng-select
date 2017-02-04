@@ -1,77 +1,127 @@
-module.exports = function(config) {
-    var testWebpackConfig = require('./webpack.test.js');
+/**
+ * @author: @AngularClass
+ */
 
-    var configuration = {
-        basePath: '',
+module.exports = function (config) {
+  var testWebpackConfig = require('./webpack.test.js')({ env: 'test' });
 
-        frameworks: ['jasmine'],
+  var configuration = {
 
-        // list of files to exclude
-        exclude: [],
+    // base path that will be used to resolve all patterns (e.g. files, exclude)
+    basePath: '',
 
-        /*
-         * list of files / patterns to load in the browser
-         *
-         * we are building the test environment in ./spec-bundle.js
-         */
-        files: [ { pattern: './config/spec-bundle.js', watched: false } ],
+    /*
+     * Frameworks to use
+     *
+     * available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+     */
+    frameworks: ['jasmine'],
 
-        preprocessors: { './config/spec-bundle.js': ['coverage', 'webpack', 'sourcemap'] },
+    // list of files to exclude
+    exclude: [],
 
-        // Webpack Config at ./webpack.test.js
-        webpack: testWebpackConfig,
+    client: {
+      captureConsole: false
+    },
 
-        coverageReporter: {
-            type: 'in-memory'
-        },
+    /*
+     * list of files / patterns to load in the browser
+     *
+     * we are building the test environment in ./spec-bundle.js
+     */
+    files: [
+      { pattern: './config/spec-bundle.js', watched: false },
+      { pattern: './src/assets/**/*', watched: false, included: false, served: true, nocache: false }
+    ],
 
-        remapCoverageReporter: {
-            'text-summary': null,
-            json: './coverage/coverage.json',
-            html: './coverage/html'
-        },
+    /*
+     * By default all assets are served at http://localhost:[PORT]/base/
+     */
+    proxies: {
+      "/assets/": "/base/src/assets/"
+    },
 
-        // Webpack please don't spam the console when running in karma!
-        webpackMiddleware: { stats: 'errors-only'},
+    /*
+     * preprocess matching files before serving them to the browser
+     * available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+     */
+    preprocessors: { './config/spec-bundle.js': ['coverage', 'webpack', 'sourcemap'] },
 
-        reporters: [ 'mocha', 'coverage', 'remap-coverage' ],
+    // Webpack Config at ./webpack.test.js
+    webpack: testWebpackConfig,
 
-        mochaReporter: {
-            ignoreSkipped: true
-        },
+    coverageReporter: {
+      type: 'in-memory'
+    },
 
-        // web server port
-        port: 9876,
+    remapCoverageReporter: {
+      'text-summary': null,
+      json: './coverage/coverage.json',
+      html: './coverage/html'
+    },
 
-        colors: true,
+    // Webpack please don't spam the console when running in karma!
+    webpackMiddleware: {
+      // webpack-dev-middleware configuration
+      // i.e.
+      noInfo: true,
+      // and use stats to turn off verbose output
+      stats: {
+        // options i.e. 
+        chunks: false
+      }
+    },
 
-        /*
-         * level of logging
-         * possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-         */
-        logLevel: config.LOG_INFO,
+    /*
+     * test results reporter to use
+     *
+     * possible values: 'dots', 'progress'
+     * available reporters: https://npmjs.org/browse/keyword/karma-reporter
+     */
+    reporters: ['mocha', 'coverage', 'remap-coverage'],
 
-        autoWatch: false,
+    // web server port
+    port: 9876,
 
-        browsers: [
-            'Chrome'
-        ],
+    // enable / disable colors in the output (reporters and logs)
+    colors: true,
 
-        customLaunchers: {
-            ChromeTravisCi: {
-                base: 'Chrome',
-                flags: ['--no-sandbox']
-            }
-        },
+    /*
+     * level of logging
+     * possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+     */
+    logLevel: config.LOG_WARN,
 
-        singleRun: true
-    };
+    // enable / disable watching file and executing tests whenever any file changes
+    autoWatch: false,
 
-    if (process.env.TRAVIS){
-        configuration.browsers = [
-            'ChromeTravisCi'
-        ];
-    }
+    /*
+     * start these browsers
+     * available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+     */
+    browsers: [
+      'Chrome'
+    ],
 
-    config.set(configuration);
+    customLaunchers: {
+      ChromeTravisCi: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    },
+
+    /*
+     * Continuous Integration mode
+     * if true, Karma captures browsers, runs the tests and exits
+     */
+    singleRun: true
+  };
+
+  if (process.env.TRAVIS) {
+    configuration.browsers = [
+      'ChromeTravisCi'
+    ];
+  }
+
+  config.set(configuration);
 };
