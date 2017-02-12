@@ -50,17 +50,19 @@ export class SelectComponent implements ControlValueAccessor {
 
     select(index: any, event?): void {
         if (event) event.stopPropagation();
-        if (this.isMulti) {
-            this.selected = [...this.selected, this.filteredSelection[index]];
-
-            // TODO: Find a better option this is just a temp fix
-            this.formatedSelection.splice(this.formatedSelection.findIndex(item => this.filteredSelection[index][this.key] === item[this.key]), 1);
-            this.filteredSelection.splice(index, 1);
-        }
+        if (this.isMulti) this.selected = [...this.selected, this.filteredSelection[index]];
         else {
-            this.selected = this.selection[index];
+            if (this.selected) {
+                this.formatedSelection.push(this.selected);
+                this.filteredSelection.push(this.selected);
+            }
+            this.selected = this.filteredSelection[index];
             this.active = false;
         }
+
+        // TODO: Find a better option this is just a temp fix
+        this.formatedSelection.splice(this.formatedSelection.findIndex(item => this.filteredSelection[index][this.key] === item[this.key]), 1);
+        this.filteredSelection.splice(index, 1);
 
         this.search = '';
         this.propagateChange(this.selected);
@@ -72,8 +74,7 @@ export class SelectComponent implements ControlValueAccessor {
             this.formatedSelection.push(this.selected[index]);
             this.filteredSelection.push(this.selected[index]);
             this.selected.splice(index, 1);
-        }
-        else this.selected = null;
+        } else this.selected = null;
         this.propagateChange(this.selected);
     }
 
@@ -86,6 +87,7 @@ export class SelectComponent implements ControlValueAccessor {
 
     keyUpHandler(event) {
         event.stopPropagation();
+
         switch (event.keyCode) {
             case 38:
                 if (!this.active) {
@@ -120,8 +122,7 @@ export class SelectComponent implements ControlValueAccessor {
     filterHandler() {
         if (this.search === '') {
             this.filteredSelection = this.formatedSelection.map(a => a);
-        }
-        else {
+        } else {
             if (!this.active) {
                 this.activeIndex = 0;
                 this.active = true;
