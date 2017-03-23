@@ -3,6 +3,10 @@
 # NG2 Select
 A select library for Angular 2, with both single and multiple functionality.
 
+```
+npm install --save @jaspero/ng2-select
+```
+
 ## Setup
 Import `JasperoSelectModule` in your `@NgModule`:
 
