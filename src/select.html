@@ -8,7 +8,7 @@
         <div class="item" *ngIf="selected">{{selected[key]}}</div>
     </template>
     <input type="text" name="search" autocomplete="off" #inp [(ngModel)]="search" (keyup)="keyUpHandler($event)"
-           (keydown)="keyDownHandler($event)" (ngModelChange)="filterHandler($event)">
+           (keydown)="keyDownHandler($event)" (ngModelChange)="filterHandler()">
 </div>
 <div class="dropdown" *ngIf="filteredSelection.length" [class.active]="active">
     <div class="dropdown-content">

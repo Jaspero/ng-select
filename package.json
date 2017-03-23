@@ -1,6 +1,6 @@
 {
   "name": "@jaspero/ng2-select",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "A select library for Angular 2, with both single and multiple functionality.",
   "scripts": {
     "lint": "tslint ./src/**/**.ts -e ./src/**/**.d.ts -t verbose",
