@@ -26,8 +26,8 @@ export class SelectComponent implements ControlValueAccessor {
         }
     }
 
-    @Input() matchFromStart: boolean = false;
-    @Input() key: string = 'name';
+    @Input() matchFromStart = false;
+    @Input() key = 'name';
     @Input() set multi(to: boolean) {
         this.isMulti = to;
         if (to) this.selected = this.selected || [];
@@ -35,10 +35,10 @@ export class SelectComponent implements ControlValueAccessor {
 
     @ViewChild('inp') inpEl: ElementRef;
 
-    search: string = '';
-    activeIndex: number = null;
-    isMulti: boolean = false;
-    active: boolean = false;
+    search = '';
+    activeIndex: any = null;
+    isMulti = false;
+    active = false;
 
     selection: any[] = [];
     formatedSelection: any[] = [];
@@ -48,7 +48,7 @@ export class SelectComponent implements ControlValueAccessor {
         this.active = false;
     }
 
-    select(index: any, event?): void {
+    select(index: any, event?: any): void {
         if (event) event.stopPropagation();
         if (this.isMulti) this.selected = [...this.selected, this.filteredSelection[index]];
         else {
@@ -68,7 +68,7 @@ export class SelectComponent implements ControlValueAccessor {
         this.propagateChange(this.selected);
     }
 
-    remove(index: number, event?): void {
+    remove(index: number, event?: any): void {
         if (event) event.stopPropagation();
         if (this.isMulti) {
             this.formatedSelection.push(this.selected[index]);
@@ -78,14 +78,14 @@ export class SelectComponent implements ControlValueAccessor {
         this.propagateChange(this.selected);
     }
 
-    openActive(event) {
+    openActive(event: any) {
         event.stopPropagation();
         this.inpEl.nativeElement.focus();
         this.active = !this.active;
         this.activeIndex = this.active ? 0 : null;
     }
 
-    keyUpHandler(event) {
+    keyUpHandler(event: any) {
         event.stopPropagation();
 
         switch (event.keyCode) {
@@ -93,16 +93,14 @@ export class SelectComponent implements ControlValueAccessor {
                 if (!this.active) {
                     this.activeIndex = this.filteredSelection.length - 1;
                     this.active = true;
-                }
-                else this.activeIndex = this.activeIndex > 0 ? this.activeIndex - 1 : this.filteredSelection.length - 1;
+                } else this.activeIndex = this.activeIndex > 0 ? this.activeIndex - 1 : this.filteredSelection.length - 1;
                 return;
 
             case 40:
                 if (!this.active) {
                     this.activeIndex = 0;
                     this.active = true;
-                }
-                else this.activeIndex = this.activeIndex < this.filteredSelection.length - 1 ? this.activeIndex + 1 : 0;
+                } else this.activeIndex = this.activeIndex < this.filteredSelection.length - 1 ? this.activeIndex + 1 : 0;
                 return;
 
             case 13:
@@ -114,7 +112,7 @@ export class SelectComponent implements ControlValueAccessor {
         }
     }
 
-    keyDownHandler(event) {
+    keyDownHandler(event: any) {
         if (event.keyCode !== 8) return;
         if (this.isMulti && this.search === '' && this.selected.length) this.remove(this.selected.length - 1);
     }
@@ -141,7 +139,7 @@ export class SelectComponent implements ControlValueAccessor {
             this.selected = value;
 
             if (this.isMulti) {
-                this.selected.forEach(item => {
+                this.selected.forEach((item: any) => {
                     let index = this.formatedSelection.findIndex(i => i[this.key] === item[this.key]);
 
                     if (index !== -1) {
@@ -155,7 +153,7 @@ export class SelectComponent implements ControlValueAccessor {
 
     propagateChange = (_: any) => {};
 
-    registerOnChange(fn) {
+    registerOnChange(fn: any) {
         this.propagateChange = fn;
     }
 
