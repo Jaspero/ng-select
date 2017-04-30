@@ -1,6 +1,6 @@
 {
   "name": "@jaspero/ng2-select",
-  "version": "0.0.12",
+  "version": "0.1.0",
   "description": "A select library for Angular 2, with both single and multiple functionality.",
   "scripts": {
     "build": "ngc -p tsconfig.json",

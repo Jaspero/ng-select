@@ -3,8 +3,141 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 @Component({
     selector: 'jaspero-select',
-    templateUrl: 'select.html',
-    styleUrls: ['select.css'],
+    template: `
+        <div [ngSwitch]="isMulti" class="items" (click)="openActive($event)" [class.multi]="isMulti">
+            <ng-template [ngSwitchCase]="true">
+                <div class="item" *ngFor="let item of selected; let i = index">
+                    <span (click)="remove(i, $event)">{{item[key]}}</span>
+                </div>
+            </ng-template>
+            <ng-template [ngSwitchCase]="false">
+                <div class="item" *ngIf="selected">{{selected[key]}}</div>
+            </ng-template>
+            <input type="text" name="search" autocomplete="off" #inp [(ngModel)]="search" (keyup)="keyUpHandler($event)"
+                   (keydown)="keyDownHandler($event)" (ngModelChange)="filterHandler()">
+        </div>
+        <div class="dropdown" *ngIf="filteredSelection.length" [class.active]="active">
+            <div class="dropdown-content">
+                <div class="option" *ngFor="let item of filteredSelection; let i = index" (click)="select(i, $event)"
+                     (mouseenter)="activeIndex = i" [class.selected]="i === activeIndex">
+                    {{item[key]}}
+                </div>
+            </div>
+        </div>
+    `,
+    styles: [`
+        :host .items {
+            font-size: 14px;
+            font-family:inherit;
+            box-sizing: border-box;
+            border: none;
+            box-shadow: none;
+            outline: none;
+            background: transparent;
+            width: 100%;
+            padding: 0 10px;
+            line-height: 40px;
+            height: 40px;
+            position: relative;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+        }
+
+        :host .items:after {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            display: block;
+            width: 0;
+            height: 0;
+            border-color: #808080 transparent transparent transparent;
+            border-style: solid;
+            border-width: 5px 5px 0 5px;
+            content: '';
+            -webkit-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            -o-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+
+        :host .items .item {
+            float: left;
+            margin: 0 3px 3px 0;
+            cursor: pointer;
+            display: inline-block;
+            vertical-align: baseline;
+            zoom: 1;
+        }
+
+        :host .items.multi .item {
+            cursor: default;
+            border-radius: 16px;
+            display: block;
+            height: 30px;
+            line-height: 30px;
+            margin: 5px 8px 0 0;
+            padding: 0 12px;
+            float: left;
+            box-sizing: border-box;
+            max-width: 100%;
+            position: relative;
+            background: rgb(224,224,224);
+            color: rgb(66,66,66);
+        }
+
+        :host input[type="text"] {
+            background: none;
+            border:none;
+            outline:none;
+            float: left;
+            min-height: 20px;
+            vertical-align: middle;
+            position: relative;
+            top: 50%;
+            font-family:inherit;
+            -webkit-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            -o-transform: translateY(-50%);
+            transform: translateY(-50%);
+            border:none;
+            box-shadow: none;
+            padding:0;
+            display: inline-block;
+            width:auto;
+        }
+
+        :host .dropdown {
+            position: absolute;
+            z-index: 10;
+            margin: -1px 0 0 0;
+            background: #ffffff;
+            border-top: 0 none;
+            display: none;
+            width: 100%;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+        }
+
+        .dropdown.active {
+            display: block;
+        }
+
+        :host .dropdown .dropdown-content {
+            max-height: 200px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        :host .dropdown .dropdown-content .option {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        :host .dropdown .dropdown-content .option:hover {
+            background-color: #f9f9f9;
+        }
+    `],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
