@@ -1,9 +1,9 @@
-[![Build Status](https://travis-ci.org/Jaspero/ng2-select.svg?branch=master)](https://travis-ci.org/jaspero/ng2-select)
-[![NPM Version](https://img.shields.io/npm/v/@jaspero/ng2-select.svg)](https://www.npmjs.com/package/@jaspero/ng2-select)
+[![Build Status](https://travis-ci.org/Jaspero/ng-select.svg?branch=master)](https://travis-ci.org/jaspero/ng-select)
+[![NPM Version](https://img.shields.io/npm/v/@jaspero/ng-select.svg)](https://www.npmjs.com/package/@jaspero/ng-select)
 # NG2 Select
-A select library for Angular 2, with both single and multiple functionality.
+A select library for Angular, with single and multiple functionality.
 ```
-npm install --save @jaspero/ng2-select
+npm install --save @jaspero/ng-select
 ```
 A demo can be found [here](https://jaspero.co/resources/projects/ng-select)
 
@@ -37,5 +37,5 @@ You can pass the following inputs to the component:
 |key|The key from the options object to be used as the name of the option|string|name|
 |multi|Should more options be selectable at once|boolean|false|
 
-This component also support Angular 2 template driven and reactive forms.
- 
+This component also support template driven and reactive forms.
+

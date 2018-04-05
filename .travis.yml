@@ -1,19 +1,10 @@
-dist: trusty
-sudo: required
 language: node_js
-
-node_js:
-  - "5"
+sudo: required
 os:
   - linux
-env:
-  global:
-    - DBUS_SESSION_BUS_ADDRESS=/dev/null
-    - DISPLAY=:99.0
-    - CHROME_BIN=chromium-browser
-before_script:
-  - sh -e /etc/init.d/xvfb start
+node_js:
+  - '8.9.1'
 install:
-  - npm install
+  - yarn install
 script:
-  - npm run lint
+  - npm run build

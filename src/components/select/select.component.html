@@ -1,0 +1,20 @@
+<div [ngSwitch]="isMulti" class="items" (click)="openActive($event)" [class.multi]="isMulti">
+    <ng-template [ngSwitchCase]="true">
+        <div class="item" *ngFor="let item of selected; let i = index">
+            <span (click)="remove(i, $event)">{{item[key]}}</span>
+        </div>
+    </ng-template>
+    <ng-template [ngSwitchCase]="false">
+        <div class="item" *ngIf="selected">{{selected[key]}}</div>
+    </ng-template>
+    <input type="text" name="search" autocomplete="off" #inp [(ngModel)]="search" (keyup)="keyUpHandler($event)"
+           (keydown)="keyDownHandler($event)" (ngModelChange)="filterHandler()">
+</div>
+<div class="dropdown" *ngIf="filteredSelection.length" [class.active]="active">
+    <div class="dropdown-content">
+        <div class="option" *ngFor="let item of filteredSelection; let i = index" (click)="select(i, $event)"
+             (mouseenter)="activeIndex = i" [class.selected]="i === activeIndex">
+            {{item[key]}}
+        </div>
+    </div>
+</div>

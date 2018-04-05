@@ -1,0 +1,31 @@
+{
+  "name": "@jaspero/ng-select",
+  "version": "0.2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jaspero/ng-select"
+  },
+  "author": {
+    "name": "Jaspero co.",
+    "email": "info@jaspero.co"
+  },
+  "keywords": [
+    "angular",
+    "select"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Jaspero/ng-select/issues"
+  },
+  "main": "ng-select.umd.js",
+  "module": "ng-select.js",
+  "jsnext:main": "ng-select.js",
+  "typings": "ng-select.d.ts",
+  "peerDependencies": {
+    "@angular/common": "^5.0.0",
+    "@angular/forms": "^5.0.0",
+    "@angular/core": "^5.0.0",
+    "rxjs": "^5.1.0",
+    "zone.js": "^0.8.4"
+  }
+}
