@@ -21,8 +21,8 @@
     "annotateForClosureCompiler": true,
     "strictMetadataEmit": true,
     "skipTemplateCodegen": true,
-    "flatModuleOutFile": "ng-confirmations.js",
-    "flatModuleId": "@jaspero/ng-confirmations"
+    "flatModuleOutFile": "ng-select.js",
+    "flatModuleId": "@jaspero/ng-select"
   },
   "files": [
     "./index.ts"

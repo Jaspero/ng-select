@@ -6,8 +6,8 @@ import {SelectComponent} from './components/select/select.component';
 export * from './components/select/select.component';
 
 @NgModule({
-    imports: [CommonModule, FormsModule],
-    declarations: [SelectComponent],
-    exports: [SelectComponent]
+  imports: [CommonModule, FormsModule],
+  declarations: [SelectComponent],
+  exports: [SelectComponent]
 })
 export class JasperoSelectModule {}
