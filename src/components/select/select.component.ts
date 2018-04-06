@@ -48,7 +48,7 @@ export class SelectComponent implements ControlValueAccessor {
     this.active = false;
   }
 
-  select(index: any, event?: any): void {
+  select(index: any, event?: any) {
     if (event) {
       event.stopPropagation();
     }
