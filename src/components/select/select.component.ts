@@ -72,7 +72,7 @@ export class SelectComponent implements ControlValueAccessor {
     this.propagateChange(this.selected);
   }
 
-  remove(index: number, event?: any): void {
+  remove(index: number, event?: any) {
     if (event) {
       event.stopPropagation();
     }
@@ -132,7 +132,7 @@ export class SelectComponent implements ControlValueAccessor {
   }
 
   keyDownHandler(event: any) {
-    if (event.keyCode !== 8 && this.isMulti && this.search === '' && this.selected.length) {
+    if (event.keyCode === 8 && this.isMulti && this.search === '' && this.selected.length) {
       this.remove(this.selected.length - 1);
     }
   }
