@@ -61,8 +61,8 @@
 
   input[type="text"] {
     background: none;
-    border:none;
-    outline:none;
+    border: none;
+    outline: none;
     float: left;
     min-height: 20px;
     vertical-align: middle;
@@ -74,11 +74,10 @@
     -ms-transform: translateY(-50%);
     -o-transform: translateY(-50%);
     transform: translateY(-50%);
-    border: none;
     box-shadow: none;
-    padding:0;
+    padding: 0;
     display: inline-block;
-    width:auto;
+    width: 100%;
   }
 
   .dropdown {
@@ -105,7 +104,7 @@
         padding: 8px;
         cursor: pointer;
 
-        &:hover {
+        &.selected {
           background-color: #f9f9f9;
         }
       }

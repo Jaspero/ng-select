@@ -1,31 +1,40 @@
-<div [ngSwitch]="isMulti" class="items" (click)="openActive($event)" [class.multi]="isMulti">
-    <ng-container *ngSwitchCase="true">
-        <div class="item" *ngFor="let item of selected; let i = index">
-            <span (click)="remove(i, $event)">{{item[key]}}</span>
-        </div>
-    </ng-container>
-    <ng-container *ngSwitchCase="false">
-        <div class="item" *ngIf="selected">{{selected[key]}}</div>
-    </ng-container>
-    <input
-            type="text"
-            name="search"
-            autocomplete="off"
-            #inp
-            [(ngModel)]="search"
-            (keyup)="keyUpHandler($event)"
-            (keydown)="keyDownHandler($event)"
-            (ngModelChange)="filterHandler()">
+<ng-template #single>
+    <div class="item" *ngIf="selection$ | async as selected" (click)="removeToUse(i, $event)">
+        <ng-container *ngTemplateOutlet="selectTemplate || defaultItem; context: {selected: selected, key: key}"></ng-container>
+    </div>
+</ng-template>
+
+<ng-template #multi>
+    <div class="item" *ngFor="let item of selection$ | async; let i = index" (click)="removeToUse(i, $event)">
+        <ng-container *ngTemplateOutlet="selectTemplate || defaultItem; context: {selected: item, key: key}"></ng-container>
+    </div>
+</ng-template>
+
+<ng-template #defaultOption let-item="item" let-key="key">
+    {{item[key]}}
+</ng-template>
+
+<ng-template #defaultItem let-selected="selected" let-key="key">
+    {{selected[key]}}
+</ng-template>
+
+<div class="items" (click)="open($event)">
+
+    <div *ngIf="isMulti$ | async as multi; then multi else single;"></div>
+
+    <input type="text" name="search" autocomplete="off" [attr.tabindex]="theTabIndex" #input>
 </div>
-<div class="dropdown" *ngIf="filteredSelection.length" [class.active]="active">
+
+<div class="dropdown" *ngIf="options.length" [class.active]="open$ | async">
     <div class="dropdown-content">
         <div
                 class="option"
-                *ngFor="let item of filteredSelection; let i = index"
-                (click)="select(i, $event)"
-                (mouseenter)="activeIndex = i"
-                [class.selected]="i === activeIndex">
-            {{item[key]}}
+                *ngFor="let item of options; let i = index;"
+                [class.selected]="(activeIndex$ | async) === i"
+                (click)="selectToUse(i, $event)"
+                (mouseenter)="setObservable('activeIndex$', i)"
+                (mouseleave)="setObservable('activeIndex$', null)">
+            <ng-container *ngTemplateOutlet="dropDownTemplate || defaultOption; context: {item: item, key: key}"></ng-container>
         </div>
     </div>
 </div>
